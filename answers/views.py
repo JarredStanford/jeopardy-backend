@@ -10,15 +10,11 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import AnswerSerializer, EpisodeSerializer
+from .serializers import AnswerSerializer
 import json
 
-from .models import Answer, Episode
-
-class AnswerViewSet(GenericViewSet, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin):
-    serializer_class = AnswerSerializer
-    queryset = Answer.objects.all()
-
+from .models import Answer
+from random import randint
 
 def index(request):
     return HttpResponse("Hello, world. You're at the answers index.")
@@ -35,7 +31,8 @@ def get_show_numbers(request):
 
 @csrf_exempt
 @api_view(['GET'])
-def get_episodes(request):
-    episodes = Episode.objects.all()
-    serializer = EpisodeSerializer(episodes, many=True)
+def get_random_answer(request):
+    answer = Answer.objects.all()[randint(0, 216929)]
+    serializer = AnswerSerializer(answer)
+    
     return Response(serializer.data)
